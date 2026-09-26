@@ -33,11 +33,13 @@ Keine lokale Python-Installation nötig! Verbinden Sie Claude Desktop, Cursor od
   "mcpServers": {
     "brutto-netto-gehaltsrechner": {
       "type": "sse",
-      "url": "https://infos-oeffentlicher-dienst.de/mcp/sse?apiKey=IHR_API_KEY"
+      "url": "https://infos-oeffentlicher-dienst.de/mcp/sse"
     }
   }
 }
 ```
+
+> 💡 **Sofort startklar (kein API-Key nötig):** Sie können den Server sofort ohne API-Key nutzen (ein kostenloses Basiskontingent ist standardmäßig aktiv). Wenn Sie höhere monatliche Limits benötigen, können Sie optional einen persönlichen Key anhängen: `https://infos-oeffentlicher-dienst.de/mcp/sse?apiKey=IHR_API_KEY`.
 
 ---
 
@@ -95,7 +97,7 @@ Fügen Sie folgenden Block in Ihre `claude_desktop_config.json` ein:
 }
 ```
 
-> **API-Key:** Einen kostenlosen API-Key erhalten Sie sofort unter [infos-oeffentlicher-dienst.de/api](https://infos-oeffentlicher-dienst.de/api) oder [infos-oeffentlicher-dienst.de/mcp](https://infos-oeffentlicher-dienst.de/mcp).
+> **API-Key (optional):** Der Server funktioniert für Basis-Abfragen auch ohne API-Key. Einen kostenlosen persönlichen Key für höhere Kontingente erhalten Sie unter [infos-oeffentlicher-dienst.de/api](https://infos-oeffentlicher-dienst.de/api) oder [infos-oeffentlicher-dienst.de/mcp](https://infos-oeffentlicher-dienst.de/mcp).
 
 ---
 

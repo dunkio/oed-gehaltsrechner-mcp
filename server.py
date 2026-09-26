@@ -74,19 +74,20 @@ def list_tools():
                     "dienstherren": {
                         "type": "array",
                         "description": "Liste aller Dienstherren für Beamte (Bund und alle 16 Bundesländer)",
-                        "items": {"type": "string"}
+                        "items": {"type": "object"}
                     },
                     "tarifvertraege": {
                         "type": "array",
                         "description": "Liste aller Tarifverträge im Öffentlichen Dienst (z. B. TVöD VKA, TV-L)",
-                        "items": {"type": "string"}
+                        "items": {"type": "object"}
                     },
-                    "perioden": {
+                    "aerzte": {
                         "type": "array",
-                        "description": "Verfügbare Gültigkeitszeiträume und Tarifrunden",
-                        "items": {"type": "string"}
+                        "description": "Liste aller Ärztetarife im Öffentlichen Dienst",
+                        "items": {"type": "object"}
                     }
-                }
+                },
+                "additionalProperties": True
             }
         },
         {
@@ -146,7 +147,8 @@ def list_tools():
                         "type": "object",
                         "description": "Regeln und Beträge für Ehe- und Kinderbestandteile des Familienzuschlags"
                     }
-                }
+                },
+                "additionalProperties": True
             }
         },
         {
@@ -320,7 +322,8 @@ def list_tools():
                         "description": "Liste der berechneten Zulagen und Zuschläge",
                         "items": {"type": "object"}
                     }
-                }
+                },
+                "additionalProperties": True
             }
         },
         {
@@ -477,7 +480,8 @@ def list_tools():
                             "netto": {"type": "number", "description": "Jahresnetto in Euro"}
                         }
                     }
-                }
+                },
+                "additionalProperties": True
             }
         }
     ]
@@ -542,13 +546,17 @@ def main():
                 tool_name = params.get("name")
                 arguments = params.get("arguments", {})
                 result_data = handle_call(tool_name, arguments)
+                is_err = isinstance(result_data, dict) and "error" in result_data
+                structured = result_data if isinstance(result_data, dict) else {"data": result_data}
                 res = {
                     "jsonrpc": "2.0",
                     "id": req_id,
                     "result": {
                         "content": [
                             {"type": "text", "text": json.dumps(result_data, ensure_ascii=False, indent=2)}
-                        ]
+                        ],
+                        "structuredContent": structured,
+                        "isError": is_err
                     }
                 }
             else:

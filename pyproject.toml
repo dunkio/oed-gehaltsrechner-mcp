@@ -1,0 +1,29 @@
+[project]
+name = "oed-gehaltsrechner-mcp"
+version = "1.0.0"
+description = "Offizieller MCP-Server für den deutschen Öffentlichen Dienst und universellen Brutto-Netto-Rechner nach BMF-PAP."
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+authors = [
+  { name = "ÖD-Infoportal", email = "kontakt@infos-oeffentlicher-dienst.de" }
+]
+keywords = ["mcp", "model-context-protocol", "gehaltsrechner", "beamte", "tvoed", "tv-l", "brutto-netto"]
+classifiers = [
+  "Development Status :: 5 - Production/Stable",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Topic :: Office/Business :: Financial :: Accounting"
+]
+dependencies = []
+
+[project.urls]
+Homepage = "https://infos-oeffentlicher-dienst.de/mcp"
+Repository = "https://github.com/dunkio/oed-gehaltsrechner-mcp"
+API = "https://infos-oeffentlicher-dienst.de/api"

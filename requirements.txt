@@ -1,0 +1,2 @@
+# Der ÖD-Gehaltsrechner MCP-Server nutzt ausschließlich die Python 3.9+ Standardbibliothek.
+# Keine externen Abhängigkeiten erforderlich.

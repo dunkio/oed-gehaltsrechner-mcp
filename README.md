@@ -113,6 +113,76 @@ Erstellen Sie in Ihrem Projekt die Datei `.cursor/mcp.json` (unterstützt direkt
 
 ---
 
+### 6. Kilo Code Einrichtung
+
+Tragen Sie den Server in Ihre Kilo Code Konfiguration ein (z. B. `kilo.jsonc` oder Kilo MCP Settings):
+
+```json
+{
+  "mcpServers": {
+    "brutto-netto-gehaltsrechner": {
+      "type": "sse",
+      "url": "https://infos-oeffentlicher-dienst.de/mcp/sse"
+    }
+  }
+}
+```
+
+---
+
+## 🔑 Authentifizierung & API-Key (Optional)
+
+Der Server ist **sofort und ohne Registrierung nutzbar** (ein kostenloses Kontingent von 30 Aufrufen/Monat ist standardmäßig aktiv). 
+
+Wenn Sie ein höheres monatliches Kontingent oder garantierte Verfügbarkeit benötigen, können Sie unter [infos-oeffentlicher-dienst.de/api](https://infos-oeffentlicher-dienst.de/api) oder [infos-oeffentlicher-dienst.de/mcp](https://infos-oeffentlicher-dienst.de/mcp) einen persönlichen API-Key generieren.
+
+### A. Remote MCP (Cloud SSE) – 2 Möglichkeiten:
+
+**1. Universell via Query-Parameter (Funktioniert in 100% aller MCP-Clients):**
+```json
+{
+  "mcpServers": {
+    "brutto-netto-gehaltsrechner": {
+      "type": "sse",
+      "url": "https://infos-oeffentlicher-dienst.de/mcp/sse?apiKey=DEIN_API_KEY"
+    }
+  }
+}
+```
+
+**2. Via HTTP-Header (z. B. in Cursor, Kilo Code, Windsurf):**
+```json
+{
+  "mcpServers": {
+    "brutto-netto-gehaltsrechner": {
+      "type": "sse",
+      "url": "https://infos-oeffentlicher-dienst.de/mcp/sse",
+      "headers": {
+        "Authorization": "Bearer DEIN_API_KEY"
+      }
+    }
+  }
+}
+```
+
+### B. Lokaler Stdio-Modus (`server.py`):
+Hinterlegen Sie den Key als Umgebungsvariable `OED_INFOPORTAL_API_KEY`:
+```json
+{
+  "mcpServers": {
+    "brutto-netto-gehaltsrechner": {
+      "command": "python",
+      "args": ["/Pfad/zu/server.py"],
+      "env": {
+        "OED_INFOPORTAL_API_KEY": "DEIN_API_KEY"
+      }
+    }
+  }
+}
+```
+
+---
+
 ## 💬 Beispiel-Prompts für Chat & Agenten
 
 Sobald der Server aktiv ist, versteht Ihre KI natürliche Fragen und liefert centgenaue Ergebnisse:

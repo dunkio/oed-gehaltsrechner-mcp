@@ -38,7 +38,7 @@ Tragen Sie den Server in Ihre Antigravity MCP-Konfiguration ein (`~/.gemini/conf
       "command": "python",
       "args": ["/Pfad/zu/oed-gehaltsrechner-mcp/server.py"],
       "env": {
-        "STAATSDIENST_API_KEY": "IHR_API_KEY",
+        "OED_INFOPORTAL_API_KEY": "IHR_API_KEY",
         "PYTHONIOENCODING": "utf-8"
       }
     }
@@ -61,7 +61,7 @@ Fügen Sie folgenden Block in Ihre `claude_desktop_config.json` ein:
       "command": "python",
       "args": ["/Pfad/zu/oed-gehaltsrechner-mcp/server.py"],
       "env": {
-        "OED_API_KEY": "IHR_API_KEY",
+        "OED_INFOPORTAL_API_KEY": "IHR_API_KEY",
         "OED_API_BASE_URL": "https://infos-oeffentlicher-dienst.de"
       }
     }
@@ -84,7 +84,7 @@ Erstellen Sie in Ihrem Projekt die Datei `.cursor/mcp.json`:
       "command": "python",
       "args": ["server.py"],
       "env": {
-        "OED_API_KEY": "IHR_API_KEY"
+        "OED_INFOPORTAL_API_KEY": "IHR_API_KEY"
       }
     }
   }

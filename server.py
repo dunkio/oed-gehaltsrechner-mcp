@@ -21,7 +21,11 @@ except Exception:
     pass
 
 API_BASE_URL = os.environ.get("OED_API_BASE_URL", "https://infos-oeffentlicher-dienst.de")
-API_KEY = os.environ.get("OED_API_KEY", "") or os.environ.get("OED_INFOPORTAL_API_KEY", "")
+API_KEY = (
+    os.environ.get("OED_INFOPORTAL_API_KEY", "")
+    or os.environ.get("OED_API_KEY", "")
+    or os.environ.get("STAATSDIENST_API_KEY", "")
+)
 
 def _fetch_api(path: str, method: str = "GET", data: dict = None) -> dict:
     url = f"{API_BASE_URL}{path}"

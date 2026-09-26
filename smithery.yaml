@@ -21,7 +21,7 @@ startCommand:
   configSchema:
     type: object
     properties:
-      OED_API_KEY:
+      OED_INFOPORTAL_API_KEY:
         type: string
         description: "Ihr persönlicher API-Key von https://infos-oeffentlicher-dienst.de/api (optional für Free-Tier Tests)"
   command: python

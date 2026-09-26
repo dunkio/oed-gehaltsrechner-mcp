@@ -101,25 +101,29 @@ def list_tools():
             "inputSchema": {
                 "type": "object",
                 "properties": {
-                    "employment_type": {
+                    "employmentType": {
                         "type": "string",
                         "enum": ["beamte", "tarif"],
-                        "description": "'beamte' für Besoldung oder 'tarif' für Tarifverträge"
+                        "description": "Art des Beschäftigungsverhältnisses: 'beamte' für Besoldung oder 'tarif' für Tarifverträge."
                     },
                     "dienstherr": {
                         "type": "string",
-                        "description": "Dienstherr (z. B. 'bayern', 'bund', 'nordrhein-westfalen') – erforderlich wenn employment_type='beamte'"
+                        "description": "Dienstherr / Bundesland (z. B. 'bayern' bzw. 'by', 'bund', 'nordrhein-westfalen' bzw. 'nrw') – erforderlich wenn employmentType='beamte'."
                     },
                     "tarifvertrag": {
                         "type": "string",
-                        "description": "Tarifvertrag (z. B. 'tvoed-vka', 'tv-l') – erforderlich wenn employment_type='tarif'"
+                        "description": "Tarifvertrag (z. B. 'tvoed-vka', 'tv-l') – erforderlich wenn employmentType='tarif'."
                     },
                     "gruppe": {
                         "type": "string",
-                        "description": "Besoldungs- oder Entgeltgruppe (z. B. 'A9', 'A13', 'E11', 'B2')"
+                        "description": "Besoldungs- oder Entgeltgruppe (z. B. 'A9', 'A13', 'E11', 'B2')."
+                    },
+                    "period_key": {
+                        "type": "string",
+                        "description": "Optionaler Gültigkeitszeitraum / Tarifrunde (z. B. '20260501_'). Standard: aktuellste Tabelle."
                     }
                 },
-                "required": ["employment_type", "gruppe"]
+                "required": ["employmentType", "gruppe"]
             },
             "outputSchema": {
                 "type": "object",
@@ -157,38 +161,135 @@ def list_tools():
             "inputSchema": {
                 "type": "object",
                 "properties": {
-                    "employment_type": {"type": "string", "enum": ["beamte", "tarif"], "description": "'beamte' oder 'tarif'"},
-                    "dienstherr": {"type": "string", "description": "z. B. 'bayern', 'bund', 'nordrhein-westfalen'"},
-                    "tarifvertrag": {"type": "string", "description": "z. B. 'tvoed-vka', 'tv-l'"},
-                    "gruppe": {"type": "string", "description": "z. B. 'A9', 'A13', 'E11'"},
-                    "stufe": {"type": "string", "description": "Erfahrungsstufe (z. B. '3', '4')"},
+                    "employmentType": {
+                        "type": "string",
+                        "enum": ["beamte", "tarif", "aerzte"],
+                        "description": "Art des Beschäftigungsverhältnisses: 'beamte' für Besoldung, 'tarif' für Tarifverträge (z. B. TVöD, TV-L), 'aerzte' für Ärztetarife. Standard: 'beamte'."
+                    },
+                    "dienstherr": {
+                        "type": "string",
+                        "description": "Dienstherr / Bundesland bei Beamten (z. B. 'bund', 'bayern' bzw. 'by', 'nordrhein-westfalen' bzw. 'nrw'). Erforderlich wenn employmentType='beamte'."
+                    },
+                    "tarifvertrag": {
+                        "type": "string",
+                        "description": "Tarifvertrag bei Tarifbeschäftigten oder Ärzten (z. B. 'tvoed-vka', 'tvoed-bund', 'tv-l', 'tv-aerzte-vka'). Erforderlich wenn employmentType='tarif' oder 'aerzte'."
+                    },
+                    "gruppe": {
+                        "type": "string",
+                        "description": "Besoldungs- oder Entgeltgruppe (z. B. 'A9', 'A13', 'B2' für Beamte oder 'E11', 'E9b', 'S12', 'P8', 'Ä1' für Tarif). Standard: 'A9'."
+                    },
+                    "stufe": {
+                        "type": "string",
+                        "description": "Erfahrungsstufe / Dienstaltersstufe (z. B. '1', '2', '3', '4', '5', '6'). Standard: '3'."
+                    },
+                    "period_key": {
+                        "type": "string",
+                        "description": "Optionaler Gültigkeitszeitraum / Tarifrunde (z. B. '20260501_'). Standard: aktuellste Tabelle."
+                    },
                     "selected_zulage_keys": {
                         "type": "array",
                         "items": {"type": "string"},
-                        "description": "Liste ausgewählter Zulagen-IDs aus get_salary_and_zulagen_options"
+                        "description": "Liste ausgewählter Zulagen-IDs aus get_salary_and_zulagen_options (z. B. Amtszulage, Stellenzulage)."
                     },
-                    "familienstand": {"type": "string", "enum": ["ledig", "verheiratet"], "description": "Familienstand für Familienzuschlag Stufe 1"},
-                    "kinder": {"type": "integer", "description": "Anzahl kindergeldberechtigter Kinder für Familienzuschlag"},
-                    "ortsklasse": {"type": "string", "description": "Bayern Ortsklasse (i bis vii) für Orts- und Familienzuschlag"},
-                    "mietenstufe": {"type": "string", "description": "NRW Mietenstufe (i bis vii) für regionalen Ergänzungszuschlag"},
-                    "steuerklasse": {"type": "integer", "enum": [1, 2, 3, 4, 5, 6], "description": "Lohnsteuerklasse (1 bis 6)"},
-                    "steuervier": {"type": "number", "description": "Faktor bei Steuerklasse IV mit Faktor (z. B. 0.85, Standard: 1.0)"},
-                    "bundesland": {"type": "string", "description": "Bundesland für Lohnsteuer, Kirchensteuer und PV Sachsen (z. B. 'bayern', 'nordrhein-westfalen')"},
-                    "kirchensteuer": {"type": "boolean", "description": "Kirchensteuerpflichtig (Standard: false)"},
-                    "church_tax_rate": {"type": "number", "description": "Kirchensteuersatz (z. B. 0.08 für Bayern/BW, 0.09 für andere)"},
-                    "kinderfreibetraege": {"type": "number", "description": "Zahl der Kinderfreibeträge auf LSt-Karte (z. B. 0.5, 1.0, 2.0)"},
-                    "geburtsjahr": {"type": "integer", "description": "Geburtsjahr (z. B. 1990 für Altersentlastung & PV-Zuschlag für Kinderlose)"},
-                    "krankenversicherung": {"type": "string", "enum": ["pkv", "gkv", "beihilfe_gkv", "pkvMit"], "description": "'pkv' (Privat), 'gkv' (Gesetzlich), 'beihilfe_gkv' (Pauschale Beihilfe), 'pkvMit' (PKV mit AG-Zuschuss)"},
-                    "kvz": {"type": "number", "description": "Kassenindividueller GKV-Zusatzbeitrag in Prozent (z. B. 2.5 oder 2.9)"},
-                    "pkpv": {"type": "number", "description": "Monatlicher PKV-Gesamtbeitrag des Arbeitnehmers in Euro"},
-                    "pkpvgesamt": {"type": "number", "description": "Basisabsicherungsbeitrag der PKV nach Bürgerentlastungsgesetz (steuermindernd)"},
-                    "kinderpflege": {"type": "integer", "description": "Anzahl Kinder unter 25 für PV-Abschlag ab dem 2. Kind (0,25 % je Kind)"},
-                    "rentenversicherung": {"type": "string", "enum": ["gRV", "nein"], "description": "'gRV' (Gesetzlich rentenversichert) oder 'nein' (Beamte/Befreit)"},
-                    "arbeitslosenversicherung": {"type": "string", "enum": ["gAV", "nein"], "description": "'gAV' (Arbeitslosenversichert) oder 'nein' (Beamte/Befreit)"},
-                    "zusatzversorgung": {"type": "string", "description": "Betriebliche Zusatzversorgung ÖD (z. B. 'vblclassic', 'zvk' oder 'nein')"},
-                    "employment_percentage": {"type": "number", "description": "Beschäftigungsumfang in Prozent (z. B. 50.0, 80.0, Standard: 100.0)"}
+                    "sonstigeZulagen": {
+                        "type": "number",
+                        "description": "Sonstige individuelle, steuerpflichtige Monatszulage in Euro (Standard: 0.0)."
+                    },
+                    "familienstand": {
+                        "type": "string",
+                        "enum": ["ledig", "verheiratet"],
+                        "description": "Familienstand für den beamtenrechtlichen Familienzuschlag Stufe 1 ('ledig' oder 'verheiratet'). Standard: 'ledig'."
+                    },
+                    "kinder": {
+                        "type": "integer",
+                        "description": "Anzahl kindergeldberechtigter Kinder für den Familienzuschlag (z. B. 0, 1, 2). Befreit zugleich vom PV-Zuschlag für Kinderlose."
+                    },
+                    "ortsklasse": {
+                        "type": "string",
+                        "enum": ["i", "ii", "iii", "iv", "v", "vi", "vii"],
+                        "description": "Bayern Ortsklasse ('i' bis 'vii') für den regionalen Orts- und Familienzuschlag. Standard: 'i'."
+                    },
+                    "mietenstufe": {
+                        "type": "string",
+                        "enum": ["i", "ii", "iii", "iv", "v", "vi", "vii"],
+                        "description": "NRW Mietenstufe ('i' bis 'vii') für den regionalen Ergänzungszuschlag. Standard: 'i'."
+                    },
+                    "steuerjahr": {
+                        "type": "integer",
+                        "enum": [2025, 2026],
+                        "description": "Steuerjahr für den BMF-Programmablaufplan (Standard: 2026)."
+                    },
+                    "steuerklasse": {
+                        "type": "integer",
+                        "enum": [1, 2, 3, 4, 5, 6],
+                        "description": "Lohnsteuerklasse (1 bis 6). Standard: 1."
+                    },
+                    "steuervier": {
+                        "type": "number",
+                        "description": "Faktor bei Steuerklasse IV mit Faktorverfahren (z. B. 0.955, Standard: 1.0)."
+                    },
+                    "bundesland": {
+                        "type": "string",
+                        "description": "Bundesland des Wohnorts für Kirchensteuersatz (8% in BY/BW vs. 9% in übrigen Ländern) und PV-Sachsenregelung (z. B. 'bayern', 'by', 'nrw'). Standard: 'bayern'."
+                    },
+                    "kirchensteuer": {
+                        "type": "boolean",
+                        "description": "Kirchensteuerpflichtig (true für ja, false für nein). Standard: false."
+                    },
+                    "kinderfreibetraege": {
+                        "type": "number",
+                        "description": "Zahl der Kinderfreibeträge auf der elektronischen Lohnsteuerkarte (z. B. 0.0, 0.5, 1.0, 1.5, 2.0). Standard: 0.0."
+                    },
+                    "kinderpflege": {
+                        "type": "integer",
+                        "description": "Anzahl Kinder unter 25 Jahren für gesetzliche PV-Staffelung ab dem 2. Kind: 0 (0-1 Kind), 1 (2 Kinder), 2 (3 Kinder), 3 (4 Kinder), 4 (5+ Kinder). Standard: 0."
+                    },
+                    "geburtsjahr": {
+                        "type": "integer",
+                        "description": "Geburtsjahr des Beschäftigten für Altersentlastung und PV-Zuschlag für Kinderlose ab 23 Jahren (Standard: 1992)."
+                    },
+                    "insuranceType": {
+                        "type": "string",
+                        "enum": ["pkvOhne", "pkvMit", "gkv", "gkvMitBeihilfe"],
+                        "description": "Krankenversicherungsart: 'pkvOhne' (Private Krankenversicherung ohne Beihilfe/AG-Zuschuss – typisch für Beamte), 'pkvMit' (PKV mit AG-Zuschuss), 'gkv' (Gesetzliche Krankenversicherung – typisch bei Tarif), 'gkvMitBeihilfe' (Pauschale Beihilfe). Standard: 'pkvOhne'."
+                    },
+                    "gkvZusatz": {
+                        "type": "number",
+                        "description": "Kassenindividueller GKV-Zusatzbeitrag in Prozent (z. B. 2.9 für Bundesdurchschnitt 2026, Standard: 2.9)."
+                    },
+                    "pkvBeitrag": {
+                        "type": "number",
+                        "description": "Monatlicher PKV-Gesamtbeitrag zur privaten Kranken- und Pflegeversicherung in Euro (Standard: 0.0)."
+                    },
+                    "profiGesamtprivBasisKvPv": {
+                        "type": "number",
+                        "description": "Basisabsicherungsbeitrag der PKV nach Bürgerentlastungsgesetz in Euro (steuermindernder Vorsorgeaufwand, Standard: 0.0)."
+                    },
+                    "pkvZuschussArbeitgeber": {
+                        "type": "number",
+                        "description": "Monatlicher Arbeitgeberzuschuss zur privaten KV/PV in Euro (Standard: 0.0)."
+                    },
+                    "rentenversicherung": {
+                        "type": "string",
+                        "enum": ["nein", "gRV"],
+                        "description": "Gesetzliche Rentenversicherung: 'nein' (Beamte/befreit) oder 'gRV' (gesetzlich rentenversichert). Standard: 'nein'."
+                    },
+                    "arbeitslosenversicherung": {
+                        "type": "string",
+                        "enum": ["nein", "gAV"],
+                        "description": "Gesetzliche Arbeitslosenversicherung: 'nein' (Beamte/befreit) oder 'gAV' (gesetzlich versichert). Standard: 'nein'."
+                    },
+                    "zusatzversorgung": {
+                        "type": "string",
+                        "enum": ["nein", "vbl", "vbl-ost"],
+                        "description": "Betriebliche Zusatzversorgung im Öffentlichen Dienst: 'nein' (Beamte/keine), 'vbl' (VBL West/klassisch), 'vbl-ost' (VBL Ost). Standard: 'nein'."
+                    },
+                    "employmentPercentage": {
+                        "type": "number",
+                        "description": "Beschäftigungsumfang in Prozent bei Teilzeit (z. B. 100.0 für Vollzeit, 80.0, 50.0). Standard: 100.0."
+                    }
                 },
-                "required": ["employment_type", "gruppe", "stufe", "steuerklasse", "krankenversicherung"]
+                "required": ["employmentType", "gruppe", "stufe", "steuerklasse", "insuranceType"]
             },
             "outputSchema": {
                 "type": "object",
@@ -224,7 +325,7 @@ def list_tools():
         },
         {
             "name": "calculate_standard_salary",
-            "description": "DIREKTBERECHNUNG & BRUTTO-NETTO-RECHNER: Berechnet Grundgehalt, Brutto, Netto und Sonderzahlung aus Kerndaten. Unterstützt sowohl Tarif & Besoldung ('beamte', 'tarif', 'aerzte') als auch freie Bruttobeträge ('sonstige' mit 'brutto_gehalt') mit exakter Lohnsteuer- und Sozialversicherungsberechnung nach aktuellem Programmablaufplan (PAP) des Bundesfinanzministeriums (BMF).",
+            "description": "DIREKTBERECHNUNG & BRUTTO-NETTO-RECHNER: Berechnet Grundgehalt, Brutto, Netto und Sonderzahlung aus Kerndaten. Unterstützt sowohl Tarif & Besoldung ('beamte', 'tarif', 'aerzte') als auch freie Bruttobeträge ('sonstige' mit 'bruttoGehalt') mit exakter Lohnsteuer- und Sozialversicherungsberechnung nach aktuellem Programmablaufplan (PAP) des Bundesfinanzministeriums (BMF).",
             "annotations": {
                 "readOnlyHint": True,
                 "destructiveHint": False,
@@ -234,41 +335,125 @@ def list_tools():
             "inputSchema": {
                 "type": "object",
                 "properties": {
-                    "employment_type": {
+                    "employmentType": {
                         "type": "string",
                         "enum": ["beamte", "tarif", "aerzte", "sonstige"],
-                        "description": "'beamte', 'tarif', 'aerzte' oder 'sonstige' (für freie Gehaltseingabe/Brutto-Netto-Rechner)"
+                        "description": "'beamte', 'tarif', 'aerzte' oder 'sonstige' (für freie Gehaltseingabe/Brutto-Netto-Rechner). Standard: 'beamte'."
                     },
-                    "brutto_gehalt": {
+                    "bruttoGehalt": {
                         "type": "number",
-                        "description": "Fester monatlicher oder jährlicher Bruttobetrag in Euro (nur erforderlich bei employment_type='sonstige')"
+                        "description": "Fester monatlicher oder jährlicher Bruttobetrag in Euro (nur erforderlich bei employmentType='sonstige')."
                     },
-                    "zeitraum_gehalt": {
+                    "zeitraumGehalt": {
                         "type": "string",
                         "enum": ["monat", "jahr"],
-                        "description": "Zeitraum für brutto_gehalt: 'monat' oder 'jahr' (Standard: 'monat')"
+                        "description": "Zeitraum für bruttoGehalt: 'monat' oder 'jahr' (Standard: 'monat')."
                     },
-                    "dienstherr": {"type": "string", "description": "z. B. 'bayern', 'bund' (für Beamte)"},
-                    "tarifvertrag": {"type": "string", "description": "z. B. 'tvoed-vka', 'tv-l' (für Tarif)"},
-                    "gruppe": {"type": "string", "description": "Besoldungs- oder Entgeltgruppe (z. B. 'A9', 'E11')"},
-                    "stufe": {"type": "string", "description": "Erfahrungsstufe (z. B. '3')"},
-                    "steuerklasse": {"type": "integer", "enum": [1, 2, 3, 4, 5, 6], "description": "Lohnsteuerklasse (1 bis 6)"},
-                    "steuervier": {"type": "number", "description": "Faktor bei Steuerklasse IV mit Faktor (z. B. 0.85, Standard: 1.0)"},
-                    "bundesland": {"type": "string", "description": "Bundesland für Lohnsteuer und Kirchensteuersatz (z. B. 'bayern', 'nordrhein-westfalen')"},
-                    "kirchensteuer": {"type": "boolean", "description": "Kirchensteuerpflichtig (Standard: false)"},
-                    "kinderfreibetraege": {"type": "number", "description": "Zahl der Kinderfreibeträge auf LSt-Karte (z. B. 0.5, 1.0, 2.0)"},
-                    "geburtsjahr": {"type": "integer", "description": "Geburtsjahr (z. B. 1990 für Altersentlastung & PV-Zuschlag für Kinderlose)"},
-                    "krankenversicherung": {"type": "string", "enum": ["pkv", "gkv", "beihilfe_gkv", "pkvMit"], "description": "'pkv' (Privat), 'gkv' (Gesetzlich), 'beihilfe_gkv' oder 'pkvMit'"},
-                    "kvz": {"type": "number", "description": "Kassenindividueller GKV-Zusatzbeitrag in Prozent (z. B. 2.5 oder 2.9)"},
-                    "pkpv": {"type": "number", "description": "Monatlicher PKV-Gesamtbeitrag in Euro"},
-                    "pkpvgesamt": {"type": "number", "description": "Basisabsicherungsbeitrag der PKV nach Bürgerentlastungsgesetz (steuermindernd)"},
-                    "kinderpflege": {"type": "integer", "description": "Anzahl Kinder unter 25 für PV-Abschlag ab dem 2. Kind (0,25 % je Kind)"},
-                    "rentenversicherung": {"type": "string", "enum": ["gRV", "nein"], "description": "'gRV' (Gesetzlich rentenversichert) oder 'nein' (Beamte/Befreit)"},
-                    "arbeitslosenversicherung": {"type": "string", "enum": ["gAV", "nein"], "description": "'gAV' (Arbeitslosenversichert) oder 'nein' (Beamte/Befreit)"},
-                    "zusatzversorgung": {"type": "string", "description": "Betriebliche Zusatzversorgung ÖD (z. B. 'vblclassic', 'zvk' oder 'nein')"},
-                    "employment_percentage": {"type": "number", "description": "Beschäftigungsumfang in Prozent (z. B. 50.0, 80.0, Standard: 100.0)"}
+                    "dienstherr": {
+                        "type": "string",
+                        "description": "Dienstherr / Bundesland bei Beamten (z. B. 'bund', 'bayern' bzw. 'by', 'nordrhein-westfalen' bzw. 'nrw')."
+                    },
+                    "tarifvertrag": {
+                        "type": "string",
+                        "description": "Tarifvertrag bei Tarifbeschäftigten oder Ärzten (z. B. 'tvoed-vka', 'tv-l')."
+                    },
+                    "gruppe": {
+                        "type": "string",
+                        "description": "Besoldungs- oder Entgeltgruppe (z. B. 'A9', 'E11')."
+                    },
+                    "stufe": {
+                        "type": "string",
+                        "description": "Erfahrungsstufe (z. B. '3')."
+                    },
+                    "period_key": {
+                        "type": "string",
+                        "description": "Optionaler Gültigkeitszeitraum / Tarifrunde."
+                    },
+                    "sonstigeZulagen": {
+                        "type": "number",
+                        "description": "Sonstige individuelle, steuerpflichtige Monatszulage in Euro (Standard: 0.0)."
+                    },
+                    "steuerjahr": {
+                        "type": "integer",
+                        "enum": [2025, 2026],
+                        "description": "Steuerjahr für den BMF-Programmablaufplan (Standard: 2026)."
+                    },
+                    "steuerklasse": {
+                        "type": "integer",
+                        "enum": [1, 2, 3, 4, 5, 6],
+                        "description": "Lohnsteuerklasse (1 bis 6). Standard: 1."
+                    },
+                    "steuervier": {
+                        "type": "number",
+                        "description": "Faktor bei Steuerklasse IV mit Faktorverfahren (z. B. 0.955, Standard: 1.0)."
+                    },
+                    "bundesland": {
+                        "type": "string",
+                        "description": "Bundesland des Wohnorts für Kirchensteuersatz und PV Sachsen (z. B. 'bayern', 'by', 'nrw'). Standard: 'bayern'."
+                    },
+                    "kirchensteuer": {
+                        "type": "boolean",
+                        "description": "Kirchensteuerpflichtig (true für ja, false für nein). Standard: false."
+                    },
+                    "kinder": {
+                        "type": "string",
+                        "enum": ["ja", "nein"],
+                        "description": "Gibt an, ob Kinder vorhanden sind: 'ja' oder 'nein' (befreit vom PV-Zuschlag für Kinderlose). Standard: 'nein'."
+                    },
+                    "kinderfreibetraege": {
+                        "type": "number",
+                        "description": "Zahl der Kinderfreibeträge auf der Lohnsteuerkarte (z. B. 0.0, 0.5, 1.0, 1.5, 2.0). Standard: 0.0."
+                    },
+                    "kinderpflege": {
+                        "type": "integer",
+                        "description": "Anzahl Kinder unter 25 Jahren für gesetzliche PV-Staffelung ab dem 2. Kind: 0 (0-1 Kind), 1 (2 Kinder), 2 (3 Kinder), 3 (4 Kinder), 4 (5+ Kinder). Standard: 0."
+                    },
+                    "geburtsjahr": {
+                        "type": "integer",
+                        "description": "Geburtsjahr des Beschäftigten für Altersentlastung und PV-Zuschlag (Standard: 1992)."
+                    },
+                    "insuranceType": {
+                        "type": "string",
+                        "enum": ["pkvOhne", "pkvMit", "gkv", "gkvMitBeihilfe"],
+                        "description": "Krankenversicherungsart: 'pkvOhne' (Private Krankenversicherung), 'pkvMit' (PKV mit AG-Zuschuss), 'gkv' (Gesetzliche Krankenversicherung), 'gkvMitBeihilfe' (Pauschale Beihilfe). Standard: 'pkvOhne'."
+                    },
+                    "gkvZusatz": {
+                        "type": "number",
+                        "description": "Kassenindividueller GKV-Zusatzbeitrag in Prozent (z. B. 2.9 für Bundesdurchschnitt 2026, Standard: 2.9)."
+                    },
+                    "pkvBeitrag": {
+                        "type": "number",
+                        "description": "Monatlicher PKV-Gesamtbeitrag in Euro (Standard: 0.0)."
+                    },
+                    "profiGesamtprivBasisKvPv": {
+                        "type": "number",
+                        "description": "Basisabsicherungsbeitrag der PKV nach Bürgerentlastungsgesetz in Euro (Standard: 0.0)."
+                    },
+                    "pkvZuschussArbeitgeber": {
+                        "type": "number",
+                        "description": "Monatlicher Arbeitgeberzuschuss zur privaten KV/PV in Euro (Standard: 0.0)."
+                    },
+                    "rentenversicherung": {
+                        "type": "string",
+                        "enum": ["nein", "gRV"],
+                        "description": "Gesetzliche Rentenversicherung: 'nein' (Beamte/befreit) oder 'gRV' (gesetzlich versichert). Standard: 'nein'."
+                    },
+                    "arbeitslosenversicherung": {
+                        "type": "string",
+                        "enum": ["nein", "gAV"],
+                        "description": "Gesetzliche Arbeitslosenversicherung: 'nein' (Beamte/befreit) oder 'gAV' (gesetzlich versichert). Standard: 'nein'."
+                    },
+                    "zusatzversorgung": {
+                        "type": "string",
+                        "enum": ["nein", "vbl", "vbl-ost"],
+                        "description": "Betriebliche Zusatzversorgung im Öffentlichen Dienst: 'nein' (Beamte/keine), 'vbl' (VBL West/klassisch), 'vbl-ost' (VBL Ost). Standard: 'nein'."
+                    },
+                    "employmentPercentage": {
+                        "type": "number",
+                        "description": "Beschäftigungsumfang in Prozent bei Teilzeit (z. B. 100.0, 80.0, 50.0). Standard: 100.0."
+                    }
                 },
-                "required": ["employment_type", "steuerklasse", "krankenversicherung"]
+                "required": ["employmentType", "steuerklasse", "insuranceType"]
             },
             "outputSchema": {
                 "type": "object",
@@ -302,14 +487,18 @@ def handle_call(tool_name: str, arguments: dict):
         return _fetch_api("/api/v1/options")
     elif tool_name == "get_salary_and_zulagen_options":
         params = []
-        if arguments.get("employment_type"):
-            params.append(f"employment_type={arguments['employment_type']}")
+        emp_type = arguments.get("employmentType") or arguments.get("employment_type")
+        if emp_type:
+            params.append(f"employment_type={emp_type}")
         if arguments.get("dienstherr"):
             params.append(f"dienstherr={arguments['dienstherr']}")
         if arguments.get("tarifvertrag"):
             params.append(f"tarifvertrag={arguments['tarifvertrag']}")
         if arguments.get("gruppe"):
             params.append(f"gruppe={arguments['gruppe']}")
+        period_k = arguments.get("period_key") or arguments.get("periodKey")
+        if period_k:
+            params.append(f"period_key={period_k}")
         qs = "&".join(params)
         return _fetch_api(f"/api/v1/agent/options?{qs}")
     elif tool_name == "calculate_agent_salary":

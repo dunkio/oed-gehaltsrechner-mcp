@@ -73,20 +73,25 @@ def list_tools():
             "outputSchema": {
                 "type": "object",
                 "properties": {
+                    "beamte": {
+                        "type": ["array", "object"],
+                        "description": "Liste aller Dienstherren für Beamte (Bund und alle 16 Bundesländer)"
+                    },
                     "dienstherren": {
-                        "type": "array",
-                        "description": "Liste aller Dienstherren für Beamte (Bund und alle 16 Bundesländer)",
-                        "items": {"type": "object"}
+                        "type": ["array", "object"],
+                        "description": "Liste aller Dienstherren für Beamte (Bund und alle 16 Bundesländer)"
+                    },
+                    "tarif": {
+                        "type": ["array", "object"],
+                        "description": "Liste aller Tarifverträge im Öffentlichen Dienst (z. B. TVöD VKA, TV-L)"
                     },
                     "tarifvertraege": {
-                        "type": "array",
-                        "description": "Liste aller Tarifverträge im Öffentlichen Dienst (z. B. TVöD VKA, TV-L)",
-                        "items": {"type": "object"}
+                        "type": ["array", "object"],
+                        "description": "Liste aller Tarifverträge im Öffentlichen Dienst (z. B. TVöD VKA, TV-L)"
                     },
                     "aerzte": {
-                        "type": "array",
-                        "description": "Liste aller Ärztetarife im Öffentlichen Dienst",
-                        "items": {"type": "object"}
+                        "type": ["array", "object"],
+                        "description": "Liste aller Ärztetarife im Öffentlichen Dienst"
                     }
                 },
                 "additionalProperties": True
@@ -131,22 +136,27 @@ def list_tools():
             "outputSchema": {
                 "type": "object",
                 "properties": {
+                    "entity": {"type": "string"},
+                    "employment_type": {"type": "string"},
                     "gruppe": {"type": "string", "description": "Besoldungs- oder Entgeltgruppe"},
-                    "stufen": {"type": "object", "description": "Tabellen-Grundgehälter je Erfahrungsstufe"},
+                    "stufen": {
+                        "type": ["array", "object"],
+                        "description": "Tabellen-Grundgehälter je Erfahrungsstufe"
+                    },
+                    "zulage_options": {
+                        "type": ["array", "object"],
+                        "description": "Wählbare Stellenzulagen und Amtszulagen (z. B. Polizeizulage) mit Betrag und ID"
+                    },
                     "stellenzulagen": {
-                        "type": "array",
-                        "description": "Wählbare Stellenzulagen und Amtszulagen mit Betrag und ID",
-                        "items": {
-                            "type": "object",
-                            "properties": {
-                                "id": {"type": "string"},
-                                "name": {"type": "string"},
-                                "betrag": {"type": "number"}
-                            }
-                        }
+                        "type": ["array", "object"],
+                        "description": "Wählbare Stellenzulagen und Amtszulagen mit Betrag und ID"
                     },
                     "familienzuschlag": {
-                        "type": "object",
+                        "type": ["object", "array"],
+                        "description": "Regeln und Beträge für Ehe- und Kinderbestandteile des Familienzuschlags"
+                    },
+                    "familienzuschlag_info": {
+                        "type": ["object", "array"],
                         "description": "Regeln und Beträge für Ehe- und Kinderbestandteile des Familienzuschlags"
                     }
                 },

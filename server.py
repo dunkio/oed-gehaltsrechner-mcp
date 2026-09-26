@@ -253,8 +253,8 @@ def list_tools():
                     },
                     "insuranceType": {
                         "type": "string",
-                        "enum": ["pkvOhne", "pkvMit", "gkv", "gkvMitBeihilfe"],
-                        "description": "Krankenversicherungsart: 'pkvOhne' (Private Krankenversicherung ohne Beihilfe/AG-Zuschuss – typisch für Beamte), 'pkvMit' (PKV mit AG-Zuschuss), 'gkv' (Gesetzliche Krankenversicherung – typisch bei Tarif), 'gkvMitBeihilfe' (Pauschale Beihilfe). Standard: 'pkvOhne'."
+                        "enum": ["gkv", "pkvOhne", "pkvMit", "gkvMitBeihilfe"],
+                        "description": "Krankenversicherungsart: Standard bei Tarifbeschäftigten ('tarif', 'aerzte', 'sonstige') ist 'gkv' (gesetzliche Krankenversicherung). Bei Beamten ('beamte') ist der Standard 'pkvOhne' (private Krankenversicherung). Weitere Optionen: 'pkvMit' (PKV mit AG-Zuschuss), 'gkvMitBeihilfe' (Pauschale Beihilfe). Standard: 'gkv' bei Tarif/Ärzte, 'pkvOhne' bei Beamten."
                     },
                     "gkvZusatz": {
                         "type": "number",
@@ -274,25 +274,25 @@ def list_tools():
                     },
                     "rentenversicherung": {
                         "type": "string",
-                        "enum": ["nein", "gRV"],
-                        "description": "Gesetzliche Rentenversicherung: 'nein' (Beamte/befreit) oder 'gRV' (gesetzlich rentenversichert). Standard: 'nein'."
+                        "enum": ["gRV", "nein"],
+                        "description": "Gesetzliche Rentenversicherung: Für Tarifbeschäftigte ('tarif', 'aerzte', 'sonstige') ist der Standard IMMER 'gRV' (gesetzliche Rentenversicherungspflicht nach § 1 SGB VI). Nur für Beamte ('beamte') oder bei ausdrücklicher Befreiung gilt 'nein'. Standard: 'gRV' bei Tarif/Ärzte, 'nein' bei Beamten."
                     },
                     "arbeitslosenversicherung": {
                         "type": "string",
-                        "enum": ["nein", "gAV"],
-                        "description": "Gesetzliche Arbeitslosenversicherung: 'nein' (Beamte/befreit) oder 'gAV' (gesetzlich versichert). Standard: 'nein'."
+                        "enum": ["gAV", "nein"],
+                        "description": "Gesetzliche Arbeitslosenversicherung: Für Tarifbeschäftigte ('tarif', 'aerzte', 'sonstige') ist der Standard IMMER 'gAV' (gesetzliche Arbeitslosenversicherungspflicht nach § 25 SGB III). Nur für Beamte ('beamte') oder bei ausdrücklicher Befreiung gilt 'nein'. Standard: 'gAV' bei Tarif/Ärzte, 'nein' bei Beamten."
                     },
                     "zusatzversorgung": {
                         "type": "string",
-                        "enum": ["nein", "vbl", "vbl-ost"],
-                        "description": "Betriebliche Zusatzversorgung im Öffentlichen Dienst: 'nein' (Beamte/keine), 'vbl' (VBL West/klassisch), 'vbl-ost' (VBL Ost). Standard: 'nein'."
+                        "enum": ["vbl", "vbl-ost", "nein"],
+                        "description": "Betriebliche Zusatzversorgung im Öffentlichen Dienst: Für Tarifbeschäftigte ('tarif') in der Regel 'vbl' (VBL West/klassisch) bzw. 'vbl-ost' (VBL Ost). Für Beamte ('beamte') gilt 'nein'. Standard: 'vbl' bei Tarif, 'nein' bei Beamten."
                     },
                     "employmentPercentage": {
                         "type": "number",
                         "description": "Beschäftigungsumfang in Prozent bei Teilzeit (z. B. 100.0 für Vollzeit, 80.0, 50.0). Standard: 100.0."
                     }
                 },
-                "required": ["employmentType", "gruppe", "stufe", "steuerklasse", "insuranceType"]
+                "required": ["employmentType", "gruppe", "stufe", "steuerklasse"]
             },
             "outputSchema": {
                 "type": "object",
@@ -418,8 +418,8 @@ def list_tools():
                     },
                     "insuranceType": {
                         "type": "string",
-                        "enum": ["pkvOhne", "pkvMit", "gkv", "gkvMitBeihilfe"],
-                        "description": "Krankenversicherungsart: 'pkvOhne' (Private Krankenversicherung), 'pkvMit' (PKV mit AG-Zuschuss), 'gkv' (Gesetzliche Krankenversicherung), 'gkvMitBeihilfe' (Pauschale Beihilfe). Standard: 'pkvOhne'."
+                        "enum": ["gkv", "pkvOhne", "pkvMit", "gkvMitBeihilfe"],
+                        "description": "Krankenversicherungsart: Standard bei Tarifbeschäftigten ('tarif', 'aerzte', 'sonstige') ist 'gkv' (gesetzliche Krankenversicherung). Bei Beamten ('beamte') ist der Standard 'pkvOhne' (private Krankenversicherung). Weitere Optionen: 'pkvMit' (PKV mit AG-Zuschuss), 'gkvMitBeihilfe' (Pauschale Beihilfe). Standard: 'gkv' bei Tarif/Ärzte, 'pkvOhne' bei Beamten."
                     },
                     "gkvZusatz": {
                         "type": "number",
@@ -439,25 +439,25 @@ def list_tools():
                     },
                     "rentenversicherung": {
                         "type": "string",
-                        "enum": ["nein", "gRV"],
-                        "description": "Gesetzliche Rentenversicherung: 'nein' (Beamte/befreit) oder 'gRV' (gesetzlich versichert). Standard: 'nein'."
+                        "enum": ["gRV", "nein"],
+                        "description": "Gesetzliche Rentenversicherung: Für Tarifbeschäftigte ('tarif', 'aerzte', 'sonstige') ist der Standard IMMER 'gRV' (gesetzliche Rentenversicherungspflicht nach § 1 SGB VI). Nur für Beamte ('beamte') oder bei ausdrücklicher Befreiung gilt 'nein'. Standard: 'gRV' bei Tarif/Ärzte, 'nein' bei Beamten."
                     },
                     "arbeitslosenversicherung": {
                         "type": "string",
-                        "enum": ["nein", "gAV"],
-                        "description": "Gesetzliche Arbeitslosenversicherung: 'nein' (Beamte/befreit) oder 'gAV' (gesetzlich versichert). Standard: 'nein'."
+                        "enum": ["gAV", "nein"],
+                        "description": "Gesetzliche Arbeitslosenversicherung: Für Tarifbeschäftigte ('tarif', 'aerzte', 'sonstige') ist der Standard IMMER 'gAV' (gesetzliche Arbeitslosenversicherungspflicht nach § 25 SGB III). Nur für Beamte ('beamte') oder bei ausdrücklicher Befreiung gilt 'nein'. Standard: 'gAV' bei Tarif/Ärzte, 'nein' bei Beamten."
                     },
                     "zusatzversorgung": {
                         "type": "string",
-                        "enum": ["nein", "vbl", "vbl-ost"],
-                        "description": "Betriebliche Zusatzversorgung im Öffentlichen Dienst: 'nein' (Beamte/keine), 'vbl' (VBL West/klassisch), 'vbl-ost' (VBL Ost). Standard: 'nein'."
+                        "enum": ["vbl", "vbl-ost", "nein"],
+                        "description": "Betriebliche Zusatzversorgung im Öffentlichen Dienst: Für Tarifbeschäftigte ('tarif') in der Regel 'vbl' (VBL West/klassisch) bzw. 'vbl-ost' (VBL Ost). Für Beamte ('beamte') gilt 'nein'. Standard: 'vbl' bei Tarif, 'nein' bei Beamten."
                     },
                     "employmentPercentage": {
                         "type": "number",
                         "description": "Beschäftigungsumfang in Prozent bei Teilzeit (z. B. 100.0, 80.0, 50.0). Standard: 100.0."
                     }
                 },
-                "required": ["employmentType", "steuerklasse", "insuranceType"]
+                "required": ["employmentType", "steuerklasse"]
             },
             "outputSchema": {
                 "type": "object",

@@ -58,14 +58,46 @@ def list_tools():
         {
             "name": "get_public_sector_options",
             "description": "Liefert eine Übersicht aller Dienstherren (Bund & 16 Bundesländer) und Tarifverträge (TVöD, TV-L, etc.) mit den verfügbaren Besoldungsgruppen.",
+            "annotations": {
+                "readOnlyHint": True,
+                "destructiveHint": False,
+                "idempotentHint": True,
+                "openWorldHint": False
+            },
             "inputSchema": {
                 "type": "object",
                 "properties": {}
+            },
+            "outputSchema": {
+                "type": "object",
+                "properties": {
+                    "dienstherren": {
+                        "type": "array",
+                        "description": "Liste aller Dienstherren für Beamte (Bund und alle 16 Bundesländer)",
+                        "items": {"type": "string"}
+                    },
+                    "tarifvertraege": {
+                        "type": "array",
+                        "description": "Liste aller Tarifverträge im Öffentlichen Dienst (z. B. TVöD VKA, TV-L)",
+                        "items": {"type": "string"}
+                    },
+                    "perioden": {
+                        "type": "array",
+                        "description": "Verfügbare Gültigkeitszeiträume und Tarifrunden",
+                        "items": {"type": "string"}
+                    }
+                }
             }
         },
         {
             "name": "get_salary_and_zulagen_options",
             "description": "DISCOVERY: Liefert für einen Dienstherrn oder Tarifvertrag und eine Gruppe alle Stufen mit Grundgehalt sowie alle wählbaren Stellenzulagen (Polizei, Justiz etc.), Amtszulagen und Familienzuschlags-Regeln.",
+            "annotations": {
+                "readOnlyHint": True,
+                "destructiveHint": False,
+                "idempotentHint": True,
+                "openWorldHint": False
+            },
             "inputSchema": {
                 "type": "object",
                 "properties": {
@@ -88,11 +120,40 @@ def list_tools():
                     }
                 },
                 "required": ["employment_type", "gruppe"]
+            },
+            "outputSchema": {
+                "type": "object",
+                "properties": {
+                    "gruppe": {"type": "string", "description": "Besoldungs- oder Entgeltgruppe"},
+                    "stufen": {"type": "object", "description": "Tabellen-Grundgehälter je Erfahrungsstufe"},
+                    "stellenzulagen": {
+                        "type": "array",
+                        "description": "Wählbare Stellenzulagen und Amtszulagen mit Betrag und ID",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "id": {"type": "string"},
+                                "name": {"type": "string"},
+                                "betrag": {"type": "number"}
+                            }
+                        }
+                    },
+                    "familienzuschlag": {
+                        "type": "object",
+                        "description": "Regeln und Beträge für Ehe- und Kinderbestandteile des Familienzuschlags"
+                    }
+                }
             }
         },
         {
             "name": "calculate_agent_salary",
             "description": "VOLLSTÄNDIGE ÖD-BERECHNUNG & BMF-PAP: Berechnet das exakte Brutto, Netto und die jährliche Sonderzahlung inklusive ausgewählter Zulagen-IDs und bundeslandspezifischem Familienzuschlag. Die Netto-Ermittlung (Lohnsteuer, Solidaritätszuschlag, Kirchensteuer und Sozialabgaben) erfolgt exakt nach dem aktuellen Programmablaufplan (PAP) des Bundesfinanzministeriums (BMF).",
+            "annotations": {
+                "readOnlyHint": True,
+                "destructiveHint": False,
+                "idempotentHint": True,
+                "openWorldHint": False
+            },
             "inputSchema": {
                 "type": "object",
                 "properties": {
@@ -128,11 +189,48 @@ def list_tools():
                     "employment_percentage": {"type": "number", "description": "Beschäftigungsumfang in Prozent (z. B. 50.0, 80.0, Standard: 100.0)"}
                 },
                 "required": ["employment_type", "gruppe", "stufe", "steuerklasse", "krankenversicherung"]
+            },
+            "outputSchema": {
+                "type": "object",
+                "properties": {
+                    "monat": {
+                        "type": "object",
+                        "description": "Monatliche Gehalts- und Abzugsdaten",
+                        "properties": {
+                            "brutto": {"type": "number", "description": "Monatliches Gesamtbrutto in Euro"},
+                            "netto": {"type": "number", "description": "Monatliches Auszahlungsnetto in Euro"},
+                            "lohnsteuer": {"type": "number", "description": "Monatliche Lohnsteuer nach BMF-PAP in Euro"},
+                            "solidaritaetszuschlag": {"type": "number", "description": "Monatlicher Solidaritätszuschlag in Euro"},
+                            "kirchensteuer": {"type": "number", "description": "Monatliche Kirchensteuer in Euro"},
+                            "sozialabgaben": {"type": "object", "description": "Sozialversicherungsbeiträge (KV, PV, RV, AV)"}
+                        }
+                    },
+                    "jahr": {
+                        "type": "object",
+                        "description": "Jährliche Gehaltsdaten inklusive Jahressonderzahlung",
+                        "properties": {
+                            "brutto": {"type": "number", "description": "Jahres-Gesamtbrutto in Euro"},
+                            "netto": {"type": "number", "description": "Jahres-Netto in Euro"},
+                            "sonderzahlung": {"type": "number", "description": "Jahressonderzahlung in Euro"}
+                        }
+                    },
+                    "zulagen_berechnet": {
+                        "type": "array",
+                        "description": "Liste der berechneten Zulagen und Zuschläge",
+                        "items": {"type": "object"}
+                    }
+                }
             }
         },
         {
             "name": "calculate_standard_salary",
             "description": "DIREKTBERECHNUNG & BRUTTO-NETTO-RECHNER: Berechnet Grundgehalt, Brutto, Netto und Sonderzahlung aus Kerndaten. Unterstützt sowohl Tarif & Besoldung ('beamte', 'tarif', 'aerzte') als auch freie Bruttobeträge ('sonstige' mit 'brutto_gehalt') mit exakter Lohnsteuer- und Sozialversicherungsberechnung nach aktuellem Programmablaufplan (PAP) des Bundesfinanzministeriums (BMF).",
+            "annotations": {
+                "readOnlyHint": True,
+                "destructiveHint": False,
+                "idempotentHint": True,
+                "openWorldHint": False
+            },
             "inputSchema": {
                 "type": "object",
                 "properties": {
@@ -171,6 +269,30 @@ def list_tools():
                     "employment_percentage": {"type": "number", "description": "Beschäftigungsumfang in Prozent (z. B. 50.0, 80.0, Standard: 100.0)"}
                 },
                 "required": ["employment_type", "steuerklasse", "krankenversicherung"]
+            },
+            "outputSchema": {
+                "type": "object",
+                "properties": {
+                    "monat": {
+                        "type": "object",
+                        "description": "Monatliche Gehalts- und Abzugsdaten",
+                        "properties": {
+                            "brutto": {"type": "number", "description": "Gesamtbrutto in Euro"},
+                            "netto": {"type": "number", "description": "Nettoauszahlung in Euro"},
+                            "lohnsteuer": {"type": "number", "description": "Lohnsteuer nach BMF-PAP in Euro"},
+                            "solidaritaetszuschlag": {"type": "number", "description": "Solidaritätszuschlag in Euro"},
+                            "kirchensteuer": {"type": "number", "description": "Kirchensteuer in Euro"}
+                        }
+                    },
+                    "jahr": {
+                        "type": "object",
+                        "description": "Jährliche Gehaltsdaten",
+                        "properties": {
+                            "brutto": {"type": "number", "description": "Jahresbrutto in Euro"},
+                            "netto": {"type": "number", "description": "Jahresnetto in Euro"}
+                        }
+                    }
+                }
             }
         }
     ]

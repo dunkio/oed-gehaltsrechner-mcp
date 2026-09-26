@@ -5,8 +5,9 @@ name: brutto-netto-gehaltsrechner
 displayName: "Brutto-Netto- & ÖD-Gehaltsrechner Deutschland"
 description: "Exakte Gehalts- & Besoldungsberechnungen für Beamte (Bund & 16 Länder) und Tarifbeschäftigte (TVöD, TV-L) sowie universeller Brutto-Netto-Rechner für freie Gehälter nach offiziellem PAP des BMF."
 author: ÖD-Infoportal
+homepage: https://infos-oeffentlicher-dienst.de
 repository: https://github.com/dunkio/oed-gehaltsrechner-mcp
-icon: https://infos-oeffentlicher-dienst.de/favicon.ico
+icon: https://infos-oeffentlicher-dienst.de/favicon_io/apple-touch-icon.png
 tags:
   - finance
   - public-sector

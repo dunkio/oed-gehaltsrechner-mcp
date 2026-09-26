@@ -1,8 +1,8 @@
-# Smithery.ai Configuration for ÖD-Gehaltsrechner MCP Server
+# Smithery.ai Configuration for Brutto-Netto & ÖD-Gehaltsrechner MCP Server
 # https://smithery.ai
 version: 1.0.0
-name: oed-gehaltsrechner
-displayName: "Öffentlicher Dienst Gehaltsrechner (ÖD-Infoportal)"
+name: brutto-netto-gehaltsrechner
+displayName: "Brutto-Netto- & ÖD-Gehaltsrechner Deutschland"
 description: "Exakte Gehalts- & Besoldungsberechnungen für Beamte (Bund & 16 Länder) und Tarifbeschäftigte (TVöD, TV-L) sowie universeller Brutto-Netto-Rechner für freie Gehälter nach offiziellem PAP des BMF."
 author: ÖD-Infoportal
 repository: https://github.com/dunkio/oed-gehaltsrechner-mcp

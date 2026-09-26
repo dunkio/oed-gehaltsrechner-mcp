@@ -216,7 +216,7 @@ def main():
                         "protocolVersion": "2024-11-05",
                         "capabilities": {"tools": {}},
                         "serverInfo": {
-                            "name": "oed-gehaltsrechner",
+                            "name": "brutto-netto-gehaltsrechner",
                             "version": "1.0.0"
                         }
                     }

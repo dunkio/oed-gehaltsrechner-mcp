@@ -20,10 +20,32 @@ Kompatibel mit **Google Antigravity**, **Claude Desktop**, **Cursor IDE**, **Win
 
 ## ⚡ Installation & Einrichtung
 
-### 1. Installation via Smithery (1-Click)
+### 1. Remote MCP (Cloud SSE – Empfohlen: Keine Python-Installation nötig!)
+
+Verbinden Sie Claude Desktop, Cursor oder Ihren KI-Agenten direkt mit dem cloud-gehosteten Server:
+- **Server URL:** `https://infos-oeffentlicher-dienst.de/mcp/sse`
+
+**Konfiguration (Claude Desktop / Cursor SSE):**
+```json
+{
+  "mcpServers": {
+    "oed-gehaltsrechner": {
+      "type": "sse",
+      "url": "https://infos-oeffentlicher-dienst.de/mcp/sse?apiKey=IHR_API_KEY"
+    }
+  }
+}
+```
+
+---
+
+### 2. Installation via Smithery (1-Click)
 ```bash
 npx @smithery/cli install oed-gehaltsrechner --client claude
 ```
+Oder im Web-Interface von [Smithery.ai](https://smithery.ai):
+- **Server ID:** `kio-dunker/oed-gehaltsrechner`
+- **MCP Server URL:** `https://infos-oeffentlicher-dienst.de/mcp/sse`
 
 ---
 

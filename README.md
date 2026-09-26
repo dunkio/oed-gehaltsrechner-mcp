@@ -2,8 +2,8 @@
 
 Offizieller Open-Source MCP-Server zur deterministischen Gehalts- und Besoldungsberechnung im deutschen Öffentlichen Dienst sowie universeller **Brutto-Netto-Rechner** für freie Gehälter nach dem offiziellen **Programmablaufplan (PAP) des Bundesfinanzministeriums (BMF)**.
 
-[![Smithery](https://smithery.ai/badge/@dunkio/brutto-netto-gehaltsrechner)](https://smithery.ai/server/@dunkio/brutto-netto-gehaltsrechner)
-[![Glama](https://glama.ai/mcp/servers/@dunkio/brutto-netto-gehaltsrechner/badge)](https://glama.ai/mcp/servers/@dunkio/brutto-netto-gehaltsrechner)
+[![Smithery](https://smithery.ai/badge/kio-dunker/brutto-netto-gehaltsrechner)](https://smithery.ai/server/kio-dunker/brutto-netto-gehaltsrechner)
+[![Glama](https://glama.ai/mcp/servers/brutto-netto-und-gehaltsrechner/badge)](https://glama.ai/mcp/servers/brutto-netto-und-gehaltsrechner)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
 Kompatibel mit **Google Antigravity**, **Claude Desktop**, **Cursor IDE**, **Windsurf** und autonomen KI-Agenten.
@@ -39,18 +39,18 @@ Keine lokale Python-Installation nötig! Verbinden Sie Claude Desktop, Cursor od
 }
 ```
 
-> 💡 **Sofort startklar (kein API-Key nötig):** Sie können den Server sofort ohne API-Key nutzen (ein kostenloses Basiskontingent ist standardmäßig aktiv). Wenn Sie höhere monatliche Limits benötigen, können Sie optional einen persönlichen Key anhängen: `https://infos-oeffentlicher-dienst.de/mcp/sse?apiKey=IHR_API_KEY`.
+> 💡 **Sofort startklar (kein API-Key nötig):** Sie können den Server sofort ohne API-Key nutzen (ein kostenloses Basiskontingent von 30 Anfragen/Monat ist standardmäßig aktiv). Wenn Sie höhere monatliche Limits benötigen, können Sie optional einen persönlichen Key anhängen: `https://infos-oeffentlicher-dienst.de/mcp/sse?apiKey=IHR_API_KEY`.
 
 ---
 
 ### 2. Installation via Smithery (1-Click)
 
 ```bash
-npx @smithery/cli install @dunkio/brutto-netto-gehaltsrechner --client claude
+npx @smithery/cli install kio-dunker/brutto-netto-gehaltsrechner --client claude
 ```
 
-Oder im Web-Interface von [Smithery.ai](https://smithery.ai/server/@dunkio/brutto-netto-gehaltsrechner):
-- **Server ID:** `@dunkio/brutto-netto-gehaltsrechner`
+Oder im Web-Interface von [Smithery.ai](https://smithery.ai/server/kio-dunker/brutto-netto-gehaltsrechner):
+- **Server ID:** `kio-dunker/brutto-netto-gehaltsrechner`
 - **MCP Server URL:** `https://infos-oeffentlicher-dienst.de/mcp/sse`
 
 ---
@@ -66,7 +66,6 @@ Tragen Sie den Server in Ihre Antigravity MCP-Konfiguration ein (`~/.gemini/conf
       "command": "python",
       "args": ["/Pfad/zu/oed-gehaltsrechner-mcp/server.py"],
       "env": {
-        "OED_INFOPORTAL_API_KEY": "IHR_API_KEY",
         "PYTHONIOENCODING": "utf-8"
       }
     }
@@ -87,33 +86,26 @@ Fügen Sie folgenden Block in Ihre `claude_desktop_config.json` ein:
   "mcpServers": {
     "brutto-netto-gehaltsrechner": {
       "command": "python",
-      "args": ["/Pfad/zu/oed-gehaltsrechner-mcp/server.py"],
-      "env": {
-        "OED_INFOPORTAL_API_KEY": "IHR_API_KEY",
-        "OED_API_BASE_URL": "https://infos-oeffentlicher-dienst.de"
-      }
+      "args": ["/Pfad/zu/oed-gehaltsrechner-mcp/server.py"]
     }
   }
 }
 ```
 
-> **API-Key (optional):** Der Server funktioniert für Basis-Abfragen auch ohne API-Key. Einen kostenlosen persönlichen Key für höhere Kontingente erhalten Sie unter [infos-oeffentlicher-dienst.de/api](https://infos-oeffentlicher-dienst.de/api) oder [infos-oeffentlicher-dienst.de/mcp](https://infos-oeffentlicher-dienst.de/mcp).
+> **API-Key (optional):** Der Server funktioniert sofort ohne API-Key (30 Abfragen/Monat). Einen optionalen persönlichen Key für höhere Kontingente können Sie unter [infos-oeffentlicher-dienst.de/api](https://infos-oeffentlicher-dienst.de/api) oder [infos-oeffentlicher-dienst.de/mcp](https://infos-oeffentlicher-dienst.de/mcp) erstellen und in `env`: `{"OED_INFOPORTAL_API_KEY": "sk_live_..."}` hinterlegen.
 
 ---
 
 ### 5. Cursor IDE Einrichtung
 
-Erstellen Sie in Ihrem Projekt die Datei `.cursor/mcp.json`:
+Erstellen Sie in Ihrem Projekt die Datei `.cursor/mcp.json` (unterstützt direkt Remote SSE):
 
 ```json
 {
   "mcpServers": {
     "brutto-netto-gehaltsrechner": {
-      "command": "python",
-      "args": ["server.py"],
-      "env": {
-        "OED_INFOPORTAL_API_KEY": "IHR_API_KEY"
-      }
+      "type": "sse",
+      "url": "https://infos-oeffentlicher-dienst.de/mcp/sse"
     }
   }
 }
@@ -149,8 +141,8 @@ python server.py
 
 ## 🌐 Verzeichnisse & Registries
 
-- **Smithery:** [smithery.ai/server/@dunkio/brutto-netto-gehaltsrechner](https://smithery.ai/server/@dunkio/brutto-netto-gehaltsrechner)
-- **Glama:** [glama.ai/mcp/servers/@dunkio/brutto-netto-gehaltsrechner](https://glama.ai/mcp/servers/@dunkio/brutto-netto-gehaltsrechner)
+- **Smithery:** [smithery.ai/server/kio-dunker/brutto-netto-gehaltsrechner](https://smithery.ai/server/kio-dunker/brutto-netto-gehaltsrechner)
+- **Glama:** [glama.ai/mcp/servers/brutto-netto-und-gehaltsrechner](https://glama.ai/mcp/servers/brutto-netto-und-gehaltsrechner)
 - **OpenAPI:** [infos-oeffentlicher-dienst.de/openapi.json](https://infos-oeffentlicher-dienst.de/openapi.json) (für Toolhouse, Composio, LangChain)
 - **Web-Dokumentation & Playground:** [infos-oeffentlicher-dienst.de/mcp](https://infos-oeffentlicher-dienst.de/mcp)
 

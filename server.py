@@ -25,7 +25,9 @@ API_KEY = (
     os.environ.get("OED_INFOPORTAL_API_KEY", "")
     or os.environ.get("OED_API_KEY", "")
     or os.environ.get("STAATSDIENST_API_KEY", "")
-)
+).strip()
+if API_KEY in ("IHR_API_KEY", "DEIN_API_KEY", "sk_live_IHR_API_KEY", "sk_live_DEIN_API_KEY", "YOUR_API_KEY"):
+    API_KEY = ""
 
 def _fetch_api(path: str, method: str = "GET", data: dict = None) -> dict:
     url = f"{API_BASE_URL}{path}"
